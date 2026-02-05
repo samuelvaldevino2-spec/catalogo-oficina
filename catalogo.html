@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Consulta de Peças | Oficina Mecânica</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🛠️</text></svg>" type="image/svg+xml">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+  font-family: 'Roboto', sans-serif;
+  line-height: 1.7;
+  color: #e0e0e0;
+  background:
+    /* Gradiente escuro sólido de fundo */
+    linear-gradient(rgba(10, 12, 16, 0.35), rgba(8, 10, 14, 0.35)),
+    /* Imagem de fundo SEM distorção */
+    url('fundo.png');
+  background-size: auto;        /* Mantém proporção original */
+  background-repeat: no-repeat;
+  background-position: center bottom; /* Posição sutil */
+  background-attachment: fixed;
+  min-height: 100vh;
+  padding-bottom: 60px;
+}
+
+    .container {
+      width: 95%;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Cabeçalho */
+    header {
+      background-color: rgba(12, 14, 18, 0.85);
+      color: white;
+      padding: 40px 0;
+      border-bottom: 2px solid #30ab5a; /* Verde como destaque principal */
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      margin-bottom: 30px;
+      border-radius: 0 0 16px 16px;
+    }
+    header .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 15px;
+    }
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.6rem;
+      font-weight: 700;
+      color: #30ab5a; /* Título em verde */
+      letter-spacing: 1px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Barra de Busca */
+    .search-box {
+      width: 100%;
+      max-width: 600px;
+      margin: 20px auto;
+    }
+    #searchInput {
+      width: 100%;
+      padding: 14px 20px;
+      font-size: 1.1rem;
+      border: 2px solid #30ab5a; /* Borda verde */
+      border-radius: 10px;
+      background-color: rgba(20, 22, 28, 0.7);
+      color: white;
+      outline: none;
+      transition: all 0.3s;
+      backdrop-filter: blur(5px);
+    }
+    #searchInput:focus {
+      border-color: #eb5c2f; /* Foco em laranja */
+      box-shadow: 0 0 0 3px rgba(235, 92, 47, 0.25);
+    }
+    #searchInput::placeholder {
+      color: #aaa;
+    }
+
+    /* Tabela de Peças */
+    .tabela-pecas {
+      background-color: rgba(22, 25, 32, 0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 16px;
+      overflow: hidden;
+      margin: 40px 0;
+      border: 1px solid rgba(48, 171, 90, 0.25);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      background-color: rgba(235, 92, 47, 0.15); /* Fundo laranja translúcido */
+      color: #eb5c2f; /* Texto laranja */
+      padding: 16px 20px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 1.1rem;
+      border-bottom: 1px solid rgba(235, 92, 47, 0.3);
+    }
+
+    td {
+      padding: 14px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      color: #f0f0f0;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover {
+      background-color: rgba(48, 171, 90, 0.12); /* Hover verde translúcido */
+    }
+
+    /* Link de nome do item */
+    .nome-item {
+      color: #30ab5a; /* Links em verde */
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    .nome-item:hover {
+      color: #eb5c2f; /* Hover em laranja */
+      text-decoration: underline;
+    }
+
+    /* Rodapé */
+    footer {
+      text-align: center;
+      padding: 30px 0;
+      margin-top: 60px;
+      color: #eb5c2f;
+      font-size: 2.5rem;
+      border-top: 1px solid #eb5c2f;
+    }
+
+    @media (max-width: 768px) {
+      header h1 { font-size: 2.1rem; }
+      .container { width: 98%; padding: 0 10px; }
+      th, td { padding: 12px 10px; font-size: 0.95rem; }
+      #searchInput { padding: 12px 15px; font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Cabeçalho -->
+  <header>
+    <div class="container">
+      <h1>Oficina Mecânica — Consulta de Itens</h1>
+      <p style="color: #ccc; font-size: 1.2rem;">Sistema rápido para identificar códigos dos itens em estoque</p>
+      <p style="color: #ccc; font-size: 1.2rem;">***VERSÃO DE TESTE***</p>
+    </div>
+  </header>
+
+  <!-- Barra de Busca -->
+  <div class="container">
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="🔍 Digite o início do nome da peça (ex: filtro, pastilha...)">
+    </div>
+  </div>
+
+  <!-- Tabela de Peças -->
+  <div class="container">
+    <div class="tabela-pecas">
+      <table id="pecasTable">
+        <thead>
+          <tr>
+            <th>Código</th>
+            <th>Nome da Peça</th>
+            <th>Tipo</th>
+            <th>Observações</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <tr>
+            <td colspan="4" style="text-align: center; padding: 30px; color: #aaa;">Carregando...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Rodapé -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 - Samuel Valdevino</p>
+    </div>
+  </footer>
+
+  <!-- Carrega os dados -->
+  <script src="pecas.js"></script>
+
+  <script>
+    // Converte CSV em array de objetos
+    function parseCSV(csvText) {
+      const lines = csvText.trim().split('\n');
+      const headers = lines[0].split(',').map(h => h.trim());
+      const rows = lines.slice(1);
+
+      return rows.map(line => {
+        const values = line.split(',').map(v => v.trim());
+        const obj = {};
+        headers.forEach((header, i) => {
+          let key = header.toLowerCase();
+          if (key.includes('cód') || key.includes('cod')) key = 'codigo';
+          else if (key.includes('nome')) key = 'nome';
+          else if (key.includes('tipo')) key = 'tipo';
+          else if (key.includes('observ')) key = 'obs';
+          obj[key] = values[i] || '';
+        });
+        return obj;
+      });
+    }
+
+    // Renderiza a tabela
+    function renderizarTabela() {
+      try {
+        const pecas = parseCSV(csvData);
+        const tbody = document.getElementById('tableBody');
+        tbody.innerHTML = '';
+
+        if (pecas.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: #eb5c2f;">Nenhuma peça encontrada</td></tr>`;
+          return;
+        }
+
+        pecas.forEach(peca => {
+          if (!peca.codigo) return;
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${peca.codigo}</td>
+            <td><a href="imagens/${peca.codigo}.jpg" target="_blank" class="nome-item">${peca.nome}</a></td>
+            <td>${peca.tipo}</td>
+            <td>${peca.obs}</td>
+          `;
+          tbody.appendChild(row);
+        });
+      } catch (e) {
+        document.getElementById('tableBody').innerHTML = 
+          `<tr><td colspan="4" style="text-align: center; color: #eb5c2f;">Erro ao carregar os dados</td></tr>`;
+        console.error(e);
+      }
+    }
+
+    // 🔍 BUSCA CORRIGIDA: só compara o INÍCIO do nome (case-insensitive)
+    document.getElementById('searchInput').addEventListener('input', function() {
+      const term = this.value.trim().toLowerCase();
+      const rows = document.querySelectorAll('#pecasTable tbody tr');
+
+      rows.forEach(row => {
+        const nomeCompleto = row.cells[1]?.textContent || '';
+        const nomeLower = nomeCompleto.toLowerCase();
+        
+        // Só mostra se o nome COMEÇA com o termo digitado
+        const match = term === '' || nomeLower.startsWith(term);
+        row.style.display = match ? '' : 'none';
+      });
+    });
+
+    // Inicia quando a página carregar
+    document.addEventListener('DOMContentLoaded', renderizarTabela);
+  </script>
+
+</body>
+</html>
