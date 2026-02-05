@@ -98,9 +98,24 @@
       -webkit-backdrop-filter: blur(12px);
       border-radius: 16px;
       overflow: hidden;
-      margin: 40px 0;
+      /* margin: 40px 0; → REMOVIDO */
       border: 1px solid rgba(48, 171, 90, 0.25);
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Responsividade para tabelas em mobile */
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+      border-radius: 16px;
+      margin: 40px 0;
+    }
+    .table-container::-webkit-scrollbar {
+      height: 8px;
+    }
+    .table-container::-webkit-scrollbar-thumb {
+      background: rgba(235, 92, 47, 0.3);
+      border-radius: 4px;
     }
 
     table {
@@ -181,7 +196,8 @@
   </div>
 
   <!-- Tabela de Peças -->
-  <div class="container">
+<div class="container">
+  <div class="table-container">
     <div class="tabela-pecas">
       <table id="pecasTable">
         <thead>
@@ -200,6 +216,7 @@
       </table>
     </div>
   </div>
+</div>
 
   <!-- Rodapé -->
   <footer>
